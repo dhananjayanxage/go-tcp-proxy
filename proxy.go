@@ -2,6 +2,7 @@ package proxy
 
 import (
 	"crypto/tls"
+	"github.com/pkg/errors"
 	"io"
 	"net"
 )
@@ -90,6 +91,11 @@ func (p *Proxy) Start() {
 	//wait for close...
 	<-p.errsig
 	p.Log.Info("Closed (%d bytes sent, %d bytes recieved)", p.sentBytes, p.receivedBytes)
+}
+
+// TearDown - tear down existing connection
+func (p *Proxy) TearDown() {
+	p.err("tearing down session", errors.New("stopping active session, teardown called"))
 }
 
 func (p *Proxy) err(s string, err error) {
